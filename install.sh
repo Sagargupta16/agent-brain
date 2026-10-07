@@ -5,6 +5,7 @@
 #   ./install.sh --host codex        # one host
 #   ./install.sh --host all --seed   # every host, and seed the brain with the public learnings
 #   ./install.sh --dry-run ...       # print what would change, change nothing
+#   ./install.sh --register-mcp      # also run `claude mcp add` / `codex mcp add` (off by default)
 #
 # Never overwrites a file it did not write: existing skills and rules are skipped
 # unless --force. Digest blocks in AGENTS.md files sit between markers and are
@@ -16,6 +17,7 @@ HOSTS="claude"
 SEED=0
 FORCE=0
 DRY=0
+REGISTER=0
 BRAIN_DIR="${AGENT_BRAIN_DIR:-$HOME/.agent-brain}"
 
 while [ $# -gt 0 ]; do
@@ -25,7 +27,8 @@ while [ $# -gt 0 ]; do
     --seed) SEED=1; shift ;;
     --force) FORCE=1; shift ;;
     --dry-run) DRY=1; shift ;;
-    -h|--help) sed -n '2,12p' "$0"; exit 0 ;;
+    --register-mcp) REGISTER=1; shift ;;
+    -h|--help) sed -n '2,13p' "$0"; exit 0 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
 done
@@ -88,7 +91,7 @@ for host in $HOSTS; do
       for d in "$REPO"/agents/*.md; do copy_dir "$d" "$HOME/.claude/agents/$(basename "$d")"; done
       for r in always-on python js infra; do copy_dir "$REPO/rules/$r.md" "$HOME/.claude/rules/$r.md"; done
       echo "hooks ship with the plugin: /plugin marketplace add Sagargupta16/agent-brain, then /plugin install agent-brain@agent-brain"
-      if command -v claude >/dev/null 2>&1; then
+      if [ "$REGISTER" = 1 ] && command -v claude >/dev/null 2>&1; then
         run claude mcp add --scope user agent-brain -e "AGENT_BRAIN_DIR=$BRAIN_DIR" -- "$PY" "$REPO/bin/brain.py" mcp
       else
         mcp_hint "claude mcp add --scope user agent-brain -e AGENT_BRAIN_DIR=$BRAIN_DIR -- $PY $REPO/bin/brain.py mcp"
@@ -98,7 +101,7 @@ for host in $HOSTS; do
       CODEX="${CODEX_HOME:-$HOME/.codex}"
       for d in "$REPO"/skills/*/; do copy_dir "${d%/}" "$CODEX/skills/$(basename "$d")"; done
       put_digest "$CODEX/AGENTS.md"
-      if command -v codex >/dev/null 2>&1; then
+      if [ "$REGISTER" = 1 ] && command -v codex >/dev/null 2>&1; then
         run codex mcp add agent-brain --env "AGENT_BRAIN_DIR=$BRAIN_DIR" -- "$PY" "$REPO/bin/brain.py" mcp
       else
         mcp_hint "codex mcp add agent-brain --env AGENT_BRAIN_DIR=$BRAIN_DIR -- $PY $REPO/bin/brain.py mcp"
