@@ -68,7 +68,10 @@ def main() -> int:
             if p.suffix == ".md":
                 for target in MD_LINK.findall(line):
                     clean = target.split("#", 1)[0]
-                    if clean and not (p.parent / clean).exists():
+                    resolved = (p.parent / clean).resolve()
+                    if not resolved.is_relative_to(ROOT):
+                        continue  # points outside the repo (workspace stacking links); not checkable here
+                    if clean and not resolved.exists():
                         problems.append(f"{rel}:{n} AB007 broken link {target}")
         if p.name == "SKILL.md":
             meta, _ = parse_frontmatter(text)
