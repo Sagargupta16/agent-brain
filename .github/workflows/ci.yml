@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Repo checks (dashes, secrets, home paths, frontmatter, links, brain lint)
+        run: python scripts/check.py
+
+      - name: Hook pipe tests
+        run: python scripts/test_hooks.py
+
+      - name: Brain round trip
+        run: |
+          d=$(mktemp -d)
+          python bin/brain.py --dir "$d" remember ci-fact -d "CI round trip" -s "ci" -b "hello brain"
+          python bin/brain.py --dir "$d" recall hello | grep -q ci-fact
+          python bin/brain.py --dir "$d" forget ci-fact -r "done"
+          python bin/brain.py --dir "$d" lint
+
+      - name: Plugin manifests are valid JSON
+        run: |
+          python -c "import json; json.load(open('.claude-plugin/plugin.json')); json.load(open('.claude-plugin/marketplace.json')); json.load(open('hooks/hooks.json'))"
+
+      - name: Lint skills (skillcheck)
+        run: npx -y @sagargupta1610/skillcheck@0.2.5 lint skills

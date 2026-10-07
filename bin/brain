@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Thin launcher so `brain` works from PATH on macOS, Linux and Git Bash.
+here=$(dirname "$0")
+if command -v python3 >/dev/null 2>&1; then exec python3 "$here/brain.py" "$@"; fi
+exec python "$here/brain.py" "$@"

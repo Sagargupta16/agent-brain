@@ -1,0 +1,11 @@
+{
+  "name": "agent-brain",
+  "version": "0.1.0",
+  "description": "An opinionated agent harness plus a shared markdown brain: 15 skills, 7 subagents, safety hooks, and a memory with sources, corrections and withdrawal that Claude Code, Codex and Kiro all read.",
+  "author": {
+    "name": "Sagar Gupta",
+    "url": "https://github.com/Sagargupta16"
+  },
+  "license": "MIT",
+  "keywords": ["memory", "skills", "agents", "hooks", "mcp", "harness"]
+}

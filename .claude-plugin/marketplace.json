@@ -1,0 +1,20 @@
+{
+  "name": "agent-brain",
+  "owner": {
+    "name": "Sagar Gupta",
+    "url": "https://github.com/Sagargupta16"
+  },
+  "metadata": {
+    "description": "One plugin: an opinionated agent harness (skills, subagents, safety hooks) plus a shared markdown brain for Claude Code, Codex and Kiro."
+  },
+  "plugins": [
+    {
+      "name": "agent-brain",
+      "source": "./",
+      "description": "15 skills, 7 subagents, safety hooks, and a memory with sources, corrections and withdrawal.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "category": "productivity"
+    }
+  ]
+}
