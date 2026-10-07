@@ -41,7 +41,9 @@ git clone https://github.com/Sagargupta16/agent-brain ~/agent-brain
 
 Drop `--dry-run` once the plan looks right. `--host` takes `claude`, `codex`, `kiro`
 or `all`; `--seed` copies the public learnings into your brain. The installer never
-overwrites a file it did not write unless you pass `--force`.
+overwrites a file it did not write unless you pass `--force`. It prints the MCP registration line for each host; add `--register-mcp` to have it run `claude mcp add` and `codex mcp add` for you.
+
+On Windows, Claude Code and Codex find their config through your user profile, not `$HOME`, so a test install with a fake `HOME` still edits your real config if it registers MCP.
 
 ## The brain
 
