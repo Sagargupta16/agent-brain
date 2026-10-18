@@ -16,7 +16,7 @@ on GitHub, mostly on Windows with Git Bash). Take the parts that fit, skip the r
 | Playbooks | Debugging, review bar, git workflow, refactor rules, session patterns, stack decisions | [`brain/playbooks/`](brain/playbooks/README.md) |
 | Skills | `save-session`, `memory-router`, `ship`, `prod-check`, `fix-all`, `sonar-sweep`, `gh-actions`, `repo-audit`, `harness-audit`, `parallel`, `ideate`, `docs-fresh`, `aws-ops`, `db-ops`, `oss` | [`skills/`](skills/) |
 | Subagents | code-reviewer, debugger, dependency-updater, git-assistant, pr-analyzer, refactorer, test-runner | [`agents/`](agents/) |
-| Hooks | Block destructive shell commands, `--no-verify` and force-push to main; block new em/en dashes; remind to save before compaction | [`hooks/`](hooks/) |
+| Hooks | Block `rm` on a drive root or the home directory, `--no-verify` and `commit -n`, force-push to or deleting main in any flag order or refspec form, and reading secret files (`.env`, SSH keys) through the shell; block new em/en dashes; remind to save before compaction | [`hooks/`](hooks/) |
 | Rules | Always-on rules (git safety, secrets, proof before "done", delivery order), plus Python, JS and IaC rules and an example prompt vocabulary | [`rules/`](rules/) |
 | Digest | The rules in about 2 KB, for any agent that reads `AGENTS.md` | [`AGENTS.md`](AGENTS.md) |
 
