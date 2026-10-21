@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Sagargupta16/orrery/main/skills/orrery/references/diagram.schema.json
+# Rendered with orrery (github.com/Sagargupta16/orrery):
+#   orrery render docs/diagrams/fact-lifecycle.yaml -o docs/diagrams/fact-lifecycle -f svg --theme both
+# Reviewed at README width: orrery review docs/diagrams/fact-lifecycle.yaml --width 880
+title: The life of a fact
+subtitle: "Pages change status, never disappear: corrected and withdrawn pages stay on disk as history."
+kind: state
+direction: right
+layout:
+  merge: false
+
+nodes:
+  start: { shape: initial }
+  active: { shape: state, label: Active, note: "recalled, in INDEX.md, exported if public", evidence: "bin/brain.py:250" }
+  corrected: { shape: state, label: Corrected, note: superseded_by names the new page, evidence: "bin/brain.py:275#superseded_by" }
+  withdrawn: { shape: state, label: Withdrawn, note: reason and date kept, align: corrected, evidence: "bin/brain.py:283#withdrawn" }
+
+edges:
+  - start -> active: { label: "remember [new name, no secrets]", evidence: "bin/brain.py:240#scan_text" }
+  - active -> corrected: { label: correct / new page is active, evidence: "bin/brain.py:260#correct" }
+  - active -> withdrawn: { label: forget, evidence: "bin/brain.py:280#forget" }
+  - corrected -> withdrawn: { label: forget, evidence: "bin/brain.py:280#forget" }

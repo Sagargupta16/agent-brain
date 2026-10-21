@@ -7,6 +7,14 @@ markdown memory that Claude Code, Codex and Kiro all read and write.
 It encodes one opinionated workflow (DevOps and full-stack work across 60+ repos
 on GitHub, mostly on Windows with Git Bash). Take the parts that fit, skip the rest.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/architecture-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="docs/diagrams/architecture-light.svg">
+  <img width="880" src="docs/diagrams/architecture-light.svg" alt="agent-brain architecture. On your machine, three agent hosts (Claude Code, Codex and Kiro) connect over stdio MCP to brain mcp, which serves recall, remember, correct and forget. brain mcp reads and writes the fact pages in ~/.agent-brain, one markdown file per fact with its source, and rebuilds INDEX.md, one line per active fact. Claude Code also loads the Claude Code plugin: safety hooks for Bash, Write/Edit and PreCompact, 15 skills and 7 subagents. Codex and Kiro get the skills and the rules digest from the installer. Sharing is by hand: public pages are exported and sent as a pull request to the GitHub repo, where CI runs scripts/check.py and the pages merge into brain/learnings at 0 problems; install.sh --seed copies the 27 public lessons back into a brain.">
+</picture>
+
+The spec behind the picture is [`docs/diagrams/architecture.yaml`](docs/diagrams/architecture.yaml), rendered with [orrery](https://github.com/Sagargupta16/orrery).
+
 ## What's inside
 
 | Part | What it is | Where |
@@ -67,6 +75,14 @@ an existing Claude Code memory folder and `recall` works on it as is.
   `--public`, and `brain` refuses text that looks like a token, key or JWT.
 - **Every agent, one memory.** `brain mcp` serves `recall`, `remember`, `correct` and
   `forget` over stdio, so any MCP client sees the same facts.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/fact-lifecycle-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="docs/diagrams/fact-lifecycle-light.svg">
+  <img width="880" src="docs/diagrams/fact-lifecycle-light.svg" alt="State diagram of a fact page. remember creates an Active page when the name is new and the text holds no secrets; an active page is recalled, listed in INDEX.md and exported if public. correct moves it to Corrected, where superseded_by names the new page, which starts Active. forget moves an Active or a Corrected page to Withdrawn, which keeps the reason and the date. There is no end state: corrected and withdrawn pages stay on disk as history.">
+</picture>
+
+The spec behind the picture is [`docs/diagrams/fact-lifecycle.yaml`](docs/diagrams/fact-lifecycle.yaml), rendered with [orrery](https://github.com/Sagargupta16/orrery).
 
 ## Share what your agents learned
 
