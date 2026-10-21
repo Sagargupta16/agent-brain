@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Sagargupta16/orrery/main/skills/orrery/references/diagram.schema.json
+# Rendered with orrery (github.com/Sagargupta16/orrery):
+#   orrery render docs/diagrams/architecture.yaml -o docs/diagrams/architecture -f svg --theme both
+# Reviewed at README width: orrery review docs/diagrams/architecture.yaml --width 880
+title: "agent-brain: one memory, every agent"
+subtitle: Claude Code, Codex and Kiro read and write the same markdown brain over stdio MCP.
+direction: down
+layout:
+  spacing: compact
+legend:
+  dashed: Sharing, run by hand
+
+groups:
+  machine: { type: boundary, label: Your machine }
+  hosts: { type: zone, label: Agent hosts, in: machine }
+  plugin: { type: box, label: Claude Code plugin, in: machine, evidence: .claude-plugin/plugin.json }
+  store: { type: zone, label: ~/.agent-brain, in: machine, evidence: "bin/brain.py:573" }
+  repo: { type: box, label: GitHub repo, icon: logos:github-icon, cols: 2 }
+
+nodes:
+  claude: { icon: logos:claude-code, label: Claude Code, in: hosts, evidence: "install.sh:89" }
+  codex: { icon: logos:codex, label: Codex, note: "skills, AGENTS.md digest", in: hosts, evidence: "install.sh:100" }
+  kiro: { icon: logos:kiro, label: Kiro, note: "skills, steering digest", in: hosts, evidence: "install.sh:110" }
+  hooks: { icon: tabler:shield-check, label: Safety hooks, note: "Bash, Write/Edit, PreCompact", in: plugin, evidence: hooks/hooks.json }
+  skills: { icon: tabler:book, label: 15 skills, in: plugin, evidence: skills/ }
+  agents: { icon: tabler:robot, label: 7 subagents, in: plugin, evidence: agents/ }
+  mcp: { icon: logos:model-context-protocol-icon, label: brain mcp, note: "recall, remember, correct, forget", in: machine, evidence: "bin/brain.py:455#serve_mcp" }
+  pages: { icon: tabler:markdown, label: Fact pages, note: one .md per fact with its source, in: store, evidence: "bin/brain.py:219#remember" }
+  index: { icon: tabler:list, label: INDEX.md, note: one line per active fact, in: store, evidence: "bin/brain.py:292#index" }
+  ci: { icon: logos:github-actions, label: CI, note: scripts/check.py, in: repo, evidence: ".github/workflows/ci.yml:23" }
+  learnings: { icon: tabler:bulb, label: brain/learnings, note: 27 public lessons, in: repo, evidence: brain/learnings/README.md }
+
+edges:
+  - hosts -> mcp: { label: stdio MCP, evidence: "install.sh:95" }
+  - claude -> plugin: loads
+  - mcp -> pages: { label: "BM25 recall, writes", evidence: "bin/brain.py:175#recall" }
+  - mcp -> index: { label: rebuilds, evidence: "bin/brain.py:292#index" }
+  - pages --> ci: { label: "export public pages, PR", evidence: "bin/brain.py:346#export" }
+  - ci --> learnings: { label: merge at 0 problems, evidence: "scripts/check.py" }
+  - learnings --> pages: { label: install.sh --seed, constraint: false, evidence: "install.sh:75" }

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2 (2026-10-21)
+
+### Added
+
+- An architecture diagram at the top of the README: Claude Code, Codex and Kiro share one brain through `brain mcp` over stdio, the Claude Code plugin's hooks, skills and subagents, and the path a public lesson takes into `brain/learnings/` and back out with `install.sh --seed`.
+- A state diagram of a fact page (active, corrected, withdrawn, never deleted) in the brain section of the README.
+- Both are orrery specs in `docs/diagrams/` (`architecture.yaml`, `fact-lifecycle.yaml`), rendered to light and dark SVGs. Their `evidence:` entries point at the file and line each part comes from, so `orrery verify` can check them.
+
 ## 0.1.1 (2026-10-18)
 
 ### Fixed
