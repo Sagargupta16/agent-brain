@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3 (2026-10-23)
+
+### Changed
+
+- Redrew the architecture diagram with orrery 0.12.0, which draws icons at 64 px instead of 48 px. The spec is unchanged; the fact lifecycle diagram has no icons and renders the same.
+
 ## 0.1.2 (2026-10-21)
 
 ### Added
