@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4 (2026-11-02)
+
+### Fixed
+
+- `brain --version` and the MCP server's `serverInfo.version` report the plugin version. `VERSION` in `bin/brain.py` had stayed at 0.1.0 through the 0.1.1 to 0.1.3 bumps.
+
 ## 0.1.3 (2026-10-23)
 
 ### Changed
